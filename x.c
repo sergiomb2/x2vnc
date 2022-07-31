@@ -94,6 +94,8 @@ static int displayWidth, displayHeight;
 static int x_offset=0, y_offset=0;
 static int grabbed;
 static int pointer_warp_threshold=5;
+static KeySym pressed_ks[256];
+static char pressed[256];
 Cursor  grabCursor=0;
 
 float remote_xpos=0.0;
@@ -196,6 +198,7 @@ Bool CreateXWindow(void)
 	    programName, XDisplayName(displayname));
     return False;
   }
+  XkbSetDetectableAutoRepeat(dpy, True, NULL);
 
   /*
    * check extensions
@@ -797,6 +800,12 @@ static void ungrabit(int x, int y, Window warpWindow)
 	return;
       modifierPressed[i]=False;
     }
+    if (pressed[i])
+      {
+	if (!SendKeyEvent(pressed_ks[i], False))
+	  return;
+	pressed[i] = 0;
+      }
   }
 
   /* this is a workaround for some older vnc servers which don't
@@ -1226,6 +1235,19 @@ static Bool HandleTopLevelEvent(XEvent *ev)
 
 
       XLookupString(&ev->xkey, keyname, 256, &ks, NULL);
+      switch (ev->type)
+	{
+	case KeyPress:
+	  pressed_ks[ev->xkey.keycode] = ks;
+	  pressed[ev->xkey.keycode] = 1;
+	  break;
+	case KeyRelease:
+	  if (pressed[ev->xkey.keycode])
+	    {
+	      pressed[ev->xkey.keycode] = 0;
+	      ks = pressed_ks[ev->xkey.keycode];
+	    }
+	}
 /*      fprintf(stderr,"Pressing %x (%c) name=%s  code=%d\n",ks,ks,keyname,ev->xkey.keycode); */
 
       if(ev->type == KeyPress && 
