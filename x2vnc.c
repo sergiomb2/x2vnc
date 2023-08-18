@@ -67,12 +67,15 @@ int main(int argc, char **argv)
       temp_file_fd=open(tmpfile, O_RDWR | O_CREAT | O_EXCL, 0600);
       unlink(tmpfile);
 
+      int n = 0;
       while(1)
       {
 	int status, pid;
 
 	/* limit how often we restart */
 	if(time(0) - last_fork < 1) sleep(2);
+	else n = 0;
+	if (n++ == nreconnect && nreconnect > 0) exit(0);
 
 	last_fork=time(0);
 	switch (pid=fork())

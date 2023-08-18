@@ -52,6 +52,7 @@ Bool forceOwnCmap = False;
 Bool forceTruecolour = False;
 Bool resurface = False;
 Bool reconnect = True;
+int nreconnect = 0;
 int requestedDepth = 0;
 float acceleration = 1.0;
 
@@ -116,6 +117,7 @@ void usage()
           "              [-noreconnect]\n"
           "              [-tunnel]\n"
           "              [-via <host>]\n"
+          "              [-nreconnect n]\n"
           " Known extensions:"
 #ifdef HAVE_XINERAMA
           " Xinerama"
@@ -258,6 +260,9 @@ void processArgs(int argc, char **argv)
           if (++i >= argc) usage();
           useSSHGateway = argv[i];
           useSSHTunnel=True;
+        } else if (strcmp(argv[i],"-nreconnect") == 0) {
+          if (++i >= argc) usage();
+          nreconnect = atoi(argv[i]);
         } else if (strcmp(argv[i],"-listen") == 0) {
           if (argumentSpecified) usage();
           
