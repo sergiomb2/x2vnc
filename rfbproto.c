@@ -25,11 +25,10 @@
 
 #include <unistd.h>
 #include <sys/types.h>
-#include <errno.h>
 #include <pwd.h>
-#include <x2vnc.h>
+#include "x2vnc.h"
 #include <X11/Xatom.h>
-#include <vncauth.h>
+#include "vncauth.h"
 #include <ctype.h>
 #include <time.h>
 
@@ -123,7 +122,7 @@ InitialiseRFBConnection(int sock)
 	minor = rfbProtocolMinorVersion;
     }
 
-    sprintf(pv,rfbProtocolVersionFormat,major,minor);
+    snprintf(pv, sizeof(pv), rfbProtocolVersionFormat, major, minor);
 
     if (!WriteExact(sock, pv, sz_rfbProtocolVersionMsg)) return False;
 
@@ -208,7 +207,7 @@ InitialiseRFBConnection(int sock)
 	if(temp_file_fd)
 	  vncEncryptAndStorePasswd(passwd, 0);
 
-	if (!WriteExact(sock, challenge, CHALLENGESIZE)) return False;
+	if (!WriteExact(sock, (char *)challenge, CHALLENGESIZE)) return False;
 
 	if (!ReadExact(sock, (char *)&authResult, 4)) return False;
 

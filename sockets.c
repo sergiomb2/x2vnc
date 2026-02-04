@@ -28,10 +28,10 @@
 #include <netinet/tcp.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include <x2vnc.h>
+#include "x2vnc.h"
 
 void PrintInHex(char *buf, int len);
-int tunnel(char *gatewayhost, char *remotehost, int remoteport);
+int tunnel(const char *gatewayhost, const char *remotehost, int remoteport);
 
 Bool errorMessageFromReadExact = True;
 Bool useSSHTunnel;
@@ -307,7 +307,7 @@ AcceptTcpConnection(int listenSock)
 {
     int sock;
     struct sockaddr_storage addr;
-    int addrlen = sizeof(addr);
+    socklen_t addrlen = sizeof(addr);
     int one = 1;
 
     sock = accept(listenSock, (struct sockaddr *) &addr, &addrlen);
@@ -358,7 +358,7 @@ Bool
 SameMachine(int sock)
 {
     struct sockaddr_in peeraddr, myaddr;
-    int addrlen = sizeof(struct sockaddr_in);
+    socklen_t addrlen = sizeof(struct sockaddr_in);
 
     getpeername(sock, (struct sockaddr *)&peeraddr, &addrlen);
     getsockname(sock, (struct sockaddr *)&myaddr, &addrlen);
@@ -411,7 +411,7 @@ PrintInHex(char *buf, int len)
 }
 
 
-int tunnel(char *gatewayhost, char *remotehost, int remoteport)
+int tunnel(const char *gatewayhost, const char *remotehost, int remoteport)
 {
   char *space, *cmd;
   int port=getFreePort();

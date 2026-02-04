@@ -25,7 +25,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/time.h>
-#include <x2vnc.h>
+#include "x2vnc.h"
 
 #define FLASHWIDTH 50	/* pixels */
 #define FLASHDELAY 1	/* seconds */

@@ -25,7 +25,7 @@
 
 #include <sys/types.h>
 #include <unistd.h>
-#include <x2vnc.h>
+#include "x2vnc.h"
 #include <math.h>
 #include <time.h>
 #include <X11/X.h>
@@ -135,7 +135,7 @@ KeySym grabkeysym=XK_F12;
 KeyCode grabkey;
 int grabmod = ControlMask;
 
-char *client_selection_text=0;
+const unsigned char *client_selection_text = NULL;
 size_t client_selection_text_length=0;
 
 int saved_xpos=-1;
@@ -257,13 +257,15 @@ Bool CreateXWindow(void)
    if(XineramaQueryExtension(dpy,&x,&y) &&
       XineramaIsActive(dpy))
    {
-     int pos,e;
+     int pos=0;
+     int e;
      int num_heads;
      int bestpos=0;
      int besthead=0;
      XineramaScreenInfo *heads;
 
-     if(heads=XineramaQueryScreens(dpy, &num_heads))
+     heads=XineramaQueryScreens(dpy, &num_heads);
+     if(heads)
      {
        /* Loop over all heads and find whatever head
 	* corresponds best with the edge the user has
@@ -1282,8 +1284,8 @@ static Bool HandleTopLevelEvent(XEvent *ev)
       }
 
       if(debug)
-	fprintf(stderr,"  --> %x (%c) name=%s (%s)\n",ks,ks,keyname,
-		ev->type == KeyPress ? "down" : "up");
+      fprintf(stderr, "  --> 0x%lx ('%lc') name=%s (%s)\n", (unsigned long)ks, (wchar_t)ks, keyname,
+        ev->type == KeyPress ? "down" : "up");
 
       /* We assume that typing means an unlocked display */
       remote_is_locked=0;
@@ -1490,7 +1492,7 @@ void handle_cut_text(char *str, size_t len)
     free((char *)client_selection_text);
   
   client_selection_text_length=len;
-  client_selection_text = str;
+  client_selection_text = (const unsigned char *)str;
   
   XGetWindowAttributes(dpy, RootWindow(dpy, 0), &attrs);
   XSelectInput(dpy, RootWindow(dpy, 0),

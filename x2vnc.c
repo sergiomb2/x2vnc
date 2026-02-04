@@ -31,7 +31,7 @@
 #include <sys/time.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <x2vnc.h>
+#include "x2vnc.h"
 
 int temp_file_fd=0;
 
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
       if(getenv("TMPDIR") && strlen(tmpdir) < 900)
 	tmpdir=getenv("TMPDIR");
 
-      sprintf(tmpfile, "%s/x2vnc-%d-%d",
+      sprintf(tmpfile, "%s/x2vnc-%d-%ld",
 	      tmpdir,
 	      getpid(),
 	      time(0));

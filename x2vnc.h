@@ -27,7 +27,7 @@
 #include <sys/time.h>
 #include <X11/Xlib.h>
 #include <X11/Xmd.h>
-#include <rfbproto.h>
+#include "rfbproto.h"
 
 
 extern int endianTest;
@@ -103,7 +103,7 @@ extern struct timeval updateRequestTime;
 extern Bool sendUpdateRequest;
 
 extern Bool ConnectToRFBServer(const char *hostname, int port);
-extern Bool InitialiseRFBConnection();
+extern Bool InitialiseRFBConnection(int sock);
 extern Bool SetFormatAndEncodings();
 extern Bool SendIncrementalFramebufferUpdateRequest();
 extern Bool SendFramebufferUpdateRequest(int x, int y, int w, int h,

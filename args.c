@@ -22,7 +22,7 @@
  */
 
 #include <sys/utsname.h>
-#include <x2vnc.h>
+#include "x2vnc.h"
 
 #define FLASHPORT  (5400)    /* Offset to listen for `flash' commands */
 #define CLIENTPORT (5500)    /* Offset to listen for reverse connections */
@@ -284,7 +284,7 @@ void processArgs(int argc, char **argv)
       port = 0;
       if (sscanf(argv[i], "[%255[0-9a-f:]]:%d", hostname, &port) != 2
         && sscanf(argv[i], "%255[^:]:%d", hostname, &port) != 2) {
-        strncpy(hostname, argv[i], sizeof(hostname));
+        snprintf(hostname, sizeof(hostname), "%s", argv[i]);
         port = 0;
       }
       
