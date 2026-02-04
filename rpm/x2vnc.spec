@@ -1,10 +1,12 @@
+%global optflags %{optflags} -Wno-unused-variable -Wno-unused-function -Wno-unused-but-set-variable -Wno-unused-result
+
 Name:          x2vnc
 Version:       1.7.4
 Release:       1%{?dist}
 Summary:       Dual screen hack for VNC
 
 Group:         User Interface/X
-License:       GPLv2+
+License:       GPL-2.0-or-later
 URL:           http://fredrik.hubbe.net/x2vnc.html
 Source0:       https://github.com/sergiomb2/x2vnc/archive/v%{version}/x2vnc-%{version}.tar.gz
 BuildRequires: gcc
