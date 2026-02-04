@@ -797,7 +797,9 @@ static void ungrabit(int x, int y, Window warpWindow)
   for (i = 255; i >= 0; i--)
   {
     if (modifierPressed[i]) {
-      if (!SendKeyEvent(XKeycodeToKeysym(dpy, i, 0), False))
+      KeySym sym = XkbKeycodeToKeysym(dpy, i, 0, 0);  /* group = 0, level = 0 */
+      if (!SendKeyEvent(sym, False))
+
 	return;
       modifierPressed[i]=False;
     }
@@ -1262,7 +1264,7 @@ static Bool HandleTopLevelEvent(XEvent *ev)
 	return 1;
       }
       if (IsModifierKey(ks)) {
-	ks = XKeycodeToKeysym(dpy, ev->xkey.keycode, 0);
+	ks = XkbKeycodeToKeysym(dpy, ev->xkey.keycode, 0, 0);
 
 	/* Ignore AltGr key, it is handled by XLookupString */
 	if( ks == XK_Mode_switch ) return True;
