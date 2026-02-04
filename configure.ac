@@ -1,4 +1,5 @@
-AC_INIT(x.c)
+AC_INIT
+AC_CONFIG_SRCDIR([x.c])
 
 AC_PROG_CC
 AC_PATH_XTRA
@@ -55,5 +56,6 @@ AC_SUBST_FILE(makefile_bottom)
 makefile_top=$srcdir/Makefile.top
 makefile_bottom=$srcdir/Makefile.bottom
 
-AC_OUTPUT(Makefile)
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
 
